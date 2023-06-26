@@ -1,13 +1,32 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import './todo-list-item.css';
 
-const ToDoListItem = ({ label, important = false}) => {
+const ToDoListItem = ({ label, important = false }) => {
 
     const style = {
-        color: important ? 'tomato' : 'black'
+        color: important ? 'tomato' : 'black',
+        fontWeight: important ? 'bold' : 'normal'
     }
 
-    return <span style={style}>{label}</span>
-}
+    return (
+        <span className="todo-list-item">
+            <span
+                className="todo-list-item-label"
+                style={style}>
+                {label}
+            </span>
+
+            <button type="button"
+                className="btn btn-outline-success btn-sm float-right">
+                <i className="fa fa-exclamation" />
+            </button>
+
+            <button type="button"
+                className="btn btn-outline-danger btn-sm float-right">
+                <i className="fa fa-trash-o" />
+            </button>
+        </span>
+    );
+};
 
 export default ToDoListItem;
