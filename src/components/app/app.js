@@ -18,7 +18,8 @@ export default class App extends Component {
       this.createTodoItem("Кодить"),
       this.createTodoItem("Спать")
     ],
-    term: ''
+    term: '',
+    filter: 'done' // active, all, done
   };
 
   //Инициализация списка задач
@@ -96,6 +97,10 @@ export default class App extends Component {
     this.setState({ term });
   };
 
+  onFilterChange = (filter) => {
+    this.setState({filter});
+  };
+
   search(items, term) {
 
     if (term.length === 0)
@@ -108,11 +113,25 @@ export default class App extends Component {
     })
   };
 
+  filter(items, filter) {
+    switch (filter) {
+      case 'all':
+        return items;
+      case 'active':
+        return items.filter((item) => !item.done);
+      case 'done':
+        return items.filter((item) => item.done);
+      default:
+        return items;
+    }
+  }
+
   render() {
 
-    const { toDoData, term } = this.state;
+    const { toDoData, term, filter } = this.state;
 
-    const visibleItems = this.search(toDoData, term);
+    const visibleItems = this.filter(
+      this.search(toDoData, term), filter);
 
     const doneCount = toDoData
       .filter((el) => el.done).length;
@@ -124,7 +143,9 @@ export default class App extends Component {
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className='top-panel d-flex'>
           <SearchPanel onSearchChange={this.onSearchChange} />
-          <ItemStatusFilter />
+          <ItemStatusFilter
+            filter={filter}
+            onFilterChange={this.onFilterChange} />
         </div>
 
         <ToDoList todos={visibleItems}
