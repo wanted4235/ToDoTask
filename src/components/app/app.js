@@ -4,10 +4,13 @@ import ToDoList from '../todo-list';
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
 import ItemStatusFilter from '../item-status-filter';
+import ItemAddForm from '../item-add-form';
 
 import './app.css';
 
 export default class App extends Component {
+
+  maxId = 100;
 
   state = {
     toDoData: [
@@ -21,12 +24,32 @@ export default class App extends Component {
     this.setState(({ toDoData }) => {
       const idx = toDoData.findIndex((el) => el.id === id);
 
-      const newArray = [...toDoData.slice(0, idx),
-      ...toDoData.slice(idx + 1)
+      const newArray = [
+        ...toDoData.slice(0, idx),
+        ...toDoData.slice(idx + 1)
       ];
 
       return {
         toDoData: newArray
+      };
+    });
+  };
+
+  addItem = (text) => {
+    const newItem = {
+      label: text,
+      important: false,
+      id: this.maxId++
+    };
+
+    this.setState(({ toDoData }) => {
+      const newArr = [
+        ...toDoData,
+        newItem
+      ]
+
+      return {
+        toDoData: newArr
       };
     });
   };
@@ -42,6 +65,8 @@ export default class App extends Component {
 
         <ToDoList todos={this.state.toDoData}
           onDeleted={this.deleteItem} />
+
+        <ItemAddForm onItemAdded={this.addItem} />
       </div>
     );
   }
